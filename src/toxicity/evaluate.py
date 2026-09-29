@@ -55,6 +55,16 @@ def load_gold(labels_csv, key_csv, scored_csv) -> tuple[pd.DataFrame, pd.DataFra
         scored.drop(columns=["channel"]), on="comment_id", how="left")
     if gold["text"].isna().any():
         raise ValueError("Some labelled comments are missing from scored.csv. Re-run `score` before `evaluate`.")
+    # Labels must belong to the current sample. Re-running `sample` after scoring again can
+    # reshuffle which comment each sample_id points to; compare the text the annotator saw.
+    if "text" in labels.columns:
+        seen = labels.set_index("sample_id")["text"].str.strip()
+        now = gold.set_index("sample_id")["text"].astype(str).str.strip()
+        shared = seen.index.intersection(now.index)
+        mismatched = int((seen[shared] != now[shared]).sum())
+        if mismatched > len(shared) * 0.02:
+            raise ValueError(f"{mismatched} of {len(shared)} labelled comments don't match the current sample, so these labels "
+                             "belong to an earlier run of `sample`. Label the current data/annotation/to_label.csv instead.")
     if len(gold) < 50:
         raise ValueError(f"Only {len(gold)} comments are labelled. Label at least 50, ideally all of them.")
     if gold["y"].sum() < 10:

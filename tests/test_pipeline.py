@@ -171,3 +171,20 @@ def test_evaluation_recovers_known_rates():
     truth = scored.groupby("channel")["truth"].mean()
     for ch in ("A", "B"):
         assert prev.loc[ch, "low"] <= truth[ch] <= prev.loc[ch, "high"]
+
+
+def test_labels_from_an_older_sample_are_rejected(tmp_path):
+    from toxicity.evaluate import load_gold
+    scored = make_scored()
+    s = draw_sample(scored, n=100)
+    s.to_csv(tmp_path / "scored_sample.csv", index=False)
+    scored.to_csv(tmp_path / "scored.csv", index=False)
+    s[["sample_id", "comment_id", "channel", "stratum", "weight"]].to_csv(tmp_path / "key.csv", index=False)
+    labels = s[["sample_id", "text"]].assign(toxic=s["truth"].astype(str), category="", notes="")
+    labels.to_csv(tmp_path / "good.csv", index=False)
+    gold, _ = load_gold(tmp_path / "good.csv", tmp_path / "key.csv", tmp_path / "scored.csv")
+    assert len(gold) == 100
+    shuffled = labels.assign(text=labels["text"].sample(frac=1, random_state=1).values)
+    shuffled.to_csv(tmp_path / "old.csv", index=False)
+    with pytest.raises(ValueError, match="earlier run"):
+        load_gold(tmp_path / "old.csv", tmp_path / "key.csv", tmp_path / "scored.csv")
