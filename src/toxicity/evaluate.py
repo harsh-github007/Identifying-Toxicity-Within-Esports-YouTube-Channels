@@ -28,16 +28,23 @@ from sklearn.pipeline import make_pipeline
 
 from .text import normalise
 
-YES = {"1", "yes", "y", "true", "toxic", "t"}
-NO = {"0", "no", "n", "false", "not toxic", "f", "clean"}
+YES = {"1", "1.0", "yes", "y", "true", "toxic", "t"}
+NO = {"0", "0.0", "no", "n", "false", "not toxic", "f", "clean"}
 THRESHOLDS = np.round(np.arange(0.05, 0.96, 0.05), 2)
 
 
 # ---------------------------------------------------------------- loading
 
 def load_gold(labels_csv, key_csv, scored_csv) -> tuple[pd.DataFrame, pd.DataFrame]:
-    labels = pd.read_csv(labels_csv, dtype=str).fillna("")
+    # sep=None sniffs commas or semicolons (Excel in some locales); utf-8-sig drops Excel's BOM.
+    labels = pd.read_csv(labels_csv, dtype=str, sep=None, engine="python", encoding="utf-8-sig").fillna("")
+    labels.columns = labels.columns.str.strip().str.lower()
+    if "toxic" not in labels.columns or "sample_id" not in labels.columns:
+        raise ValueError(f"{labels_csv} needs the columns sample_id and toxic. Found: {', '.join(labels.columns)}.")
     raw = labels["toxic"].str.strip().str.lower()
+    if (raw == "").all():
+        raise ValueError(f"The toxic column in {labels_csv} is empty. Fill it with 1 or 0 for each comment "
+                         "(see docs/labelling-guide.md), save as CSV, and upload it again.")
     bad = labels[~raw.isin(YES | NO) & (raw != "")]
     if len(bad):
         raise ValueError(f"Rows {list(bad['sample_id'][:5])} have a toxic value that isn't 1/0 or yes/no.")
