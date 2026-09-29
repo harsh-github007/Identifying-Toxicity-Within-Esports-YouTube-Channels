@@ -1,0 +1,78 @@
+# Hinglish and English abuse terms, one per line: term,category
+# Matching runs on normalised text (lower case, leetspeak undone, stretched letters squashed),
+# whole words only. Masked spellings such as ch*tiya are caught automatically.
+# Categories: profanity (sexual or obscene), insult (demeaning), threat (harm or self-harm).
+# This list is a transparent baseline, not ground truth. Its accuracy is measured against hand labels.
+# Left out on purpose: "chod" (usually "leave", as in "piche chod diya") and "lode" (a common misspelling of "load").
+term,category
+chutiya,profanity
+chutiye,profanity
+chutia,profanity
+chutiyapa,profanity
+madarchod,profanity
+maderchod,profanity
+madarchood,profanity
+bhenchod,profanity
+behenchod,profanity
+bhanchod,profanity
+bhosdike,profanity
+bhosdika,profanity
+bhosdiwale,profanity
+bhosda,profanity
+bsdk,profanity
+mc,profanity
+bc,profanity
+mkc,profanity
+bkl,profanity
+gandu,profanity
+gaandu,profanity
+gaand,profanity
+lauda,profanity
+lawda,profanity
+lodu,profanity
+lund,profanity
+randi,profanity
+randwa,profanity
+chodu,profanity
+jhant,profanity
+jhaatu,profanity
+tatti,insult
+harami,insult
+haramkhor,insult
+kamina,insult
+kamine,insult
+kutta,insult
+kutte,insult
+kutti,insult
+suar,insult
+gadha,insult
+ullu,insult
+chapri,insult
+nalla,insult
+bewakoof,insult
+bakwas,insult
+fuck,profanity
+fucking,profanity
+fck,profanity
+fuk,profanity
+motherfucker,profanity
+shit,profanity
+bitch,profanity
+bastard,profanity
+asshole,profanity
+dick,profanity
+stfu,profanity
+wtf,profanity
+idiot,insult
+stupid,insult
+dumb,insult
+loser,insult
+noob,insult
+trash,insult
+clown,insult
+retard,insult
+kys,threat
+kill yourself,threat
+go die,threat
+mar ja,threat
+mar jao,threat

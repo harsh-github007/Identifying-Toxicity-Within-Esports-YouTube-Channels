@@ -1,0 +1,13 @@
+# collected comments stay local (YouTube API terms limit how long raw data may be kept)
+data/*
+!data/annotation/
+data/annotation/*
+!data/annotation/labels.csv
+!data/annotation/sample_key.csv
+
+__pycache__/
+*.egg-info/
+.pytest_cache/
+.ipynb_checkpoints/
+.venv/
+.DS_Store

@@ -1,0 +1,19 @@
+# Channels to study. Each entry needs either `id` (the UC... channel ID) or `handle`.
+# IDs are the most reliable; a handle is looked up once with channels.list?forHandle (1 quota unit).
+# If a handle is wrong, `collect` stops and says which one, so fix it here and re-run.
+
+videos_per_channel: 10        # most recent uploads per channel
+comments_per_video: 500       # top-level comments; replies are fetched too
+include_replies: true
+
+channels:
+  - name: Total Gaming
+    id: UC5c9VlYTSvBSCaoMu_GI6gQ
+  - name: Techno Gamerz
+    id: UCX8pnu3DYUnx8qy8V_c6oHg
+  - name: Gyan Gaming
+    id: UChXi_PlJkRMPYFQBOJ3MpxA
+  - name: A_S Gaming
+    handle: "@A_S_Gaming"     # verify on the channel page
+  - name: Desi Gamers
+    handle: "@DesiGamers"     # verify on the channel page

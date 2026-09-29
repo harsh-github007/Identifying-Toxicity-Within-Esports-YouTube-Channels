@@ -1,97 +1,92 @@
-# Identifying Toxicity Within Esports YouTube Channels
+# Toxicity in Indian Esports YouTube Comments
 
-This repository contains the implementation and analysis of a research project aimed at identifying and measuring toxicity in YouTube comments from Indian esports channels. By leveraging the YouTube Data API and machine learning, the study quantifies the level of toxic content and explores its implications for the online esports community.
+How toxic are the comment sections of India's biggest gaming channels, and how well can automatic tools tell? This project collects recent comments from five channels, labels a sample by hand, measures three detection methods against those labels, and estimates the share of toxic comments per channel with confidence intervals.
 
-## Overview
+[![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/harsh-github007/Identifying-Toxicity-Within-Esports-YouTube-Channels/blob/main/notebooks/run_study.ipynb)
 
-The growing prevalence of online platforms like YouTube has created opportunities for content sharing and interaction. However, these interactions often include toxic comments, potentially impacting the mental well-being of creators and viewers. This project focuses on analyzing the comments on Indian esports YouTube channels to assess their toxicity levels.
+> **Results:** see [`results/results.md`](results/results.md) once the study has been run. The pipeline and tests are complete; the numbers are produced by running the notebook.
 
-### Key Features
-- **Data Collection**: Using the YouTube Data API to gather comments from popular Indian esports channels.
-- **Machine Learning**: Leveraging logistic regression and Google's Perspective API to classify comments as toxic or non-toxic.
-- **Metrics**: Generating performance metrics such as F1 score, precision, and recall to evaluate model accuracy.
+## Why it's hard
 
----
+Most comments are **Hinglish**: Hindi written in Latin script, mixed with English, with creative spelling ("bhaii", "opp", "ch*tiya"). Off-the-shelf toxicity models are trained mostly on English and European languages, and English sentiment tools read Hinglish as neutral. Any claim about toxicity here is only as good as the check against human judgement, so that check is built into the design.
 
-## Table of Contents
-- [Dataset Preparation](#dataset-preparation)
-- [Data Processing Pipeline](#data-processing-pipeline)
-- [Machine Learning Model](#machine-learning-model)
-- [Results and Analysis](#results-and-analysis)
-- [Future Work](#future-work)
-- [Acknowledgments](#acknowledgments)
+## Method
 
----
+1. **Collect** (`toxicity collect`). The YouTube Data API v3 fetches comments and replies from each channel's 10 most recent uploads. Author IDs are hashed, so no usernames are stored. Collection stops if two channels share videos or more than 15% of their comments, which guards against the data mix-up described below.
+2. **Score** (`toxicity score`). Every comment gets two automatic judgements:
+   - [Detoxify](https://github.com/unitaryai/detoxify)'s multilingual XLM-RoBERTa model, a toxicity probability from 0 to 1.
+   - A transparent Hinglish and English [word list](config/lexicon.csv) with whole-word matching that sees through leetspeak, stretched letters and masked spellings.
+3. **Sample** (`toxicity sample`). 400 comments are drawn for hand labelling, stratified by channel and over-sampling comments either method flagged, because toxic comments are rare. Each sampled comment carries a weight so all later estimates remain unbiased. The labelling sheet hides the channel and the automatic scores.
+4. **Label** by hand, following the [labelling guide](docs/labelling-guide.md).
+5. **Evaluate** (`toxicity evaluate`). Three methods are compared against the labels with 5-fold cross-validation, weighted precision, recall and F1, and bootstrap confidence intervals:
+   - the word list,
+   - Detoxify with its threshold tuned inside each fold,
+   - a character n-gram logistic regression trained on the labels, which suits Hinglish spelling variation.
+6. **Estimate** toxicity per channel two ways:
+   - **Hand-labelled estimate:** the weighted share of labelled comments that are toxic, with a stratified Jeffreys interval that stays honest when toxic comments are rare.
+   - **All-comments estimate:** the best method applied to every comment, corrected for its measured sensitivity and specificity with the Rogan–Gladen estimator. A bootstrap resamples both the labels and whole videos, since comments on one video aren't independent.
 
-## Dataset Preparation
+## Running it
 
-### Steps:
-1. **Data Collection**: Comments were extracted using the YouTube Data API.
-2. **Data Cleaning**:
-   - Removed emojis and trailing spaces.
-   - Applied stopword removal using the NLTK library.
-   - Normalized text to lowercase for consistency.
+**In Colab (recommended):** click the badge above. It needs a free YouTube Data API key: in [Google Cloud Console](https://console.cloud.google.com/), create a project, enable *YouTube Data API v3*, then go to *Credentials → Create credentials → API key*. The default settings use a few hundred of the 10,000 free daily quota units.
 
-3. **Labeling**:
-   - Used the TextBlob library to calculate sentiment polarity.
-   - Labeled comments as positive (1) or negative (-1) based on thresholds.
+**Locally** (Python 3.10+):
 
----
+```bash
+pip install -e ".[model,dev]"
+export YOUTUBE_API_KEY=...        # never commit this
+python -m toxicity collect
+python -m toxicity score
+python -m toxicity sample -n 400  # then label data/annotation/to_label.csv, save as labels.csv
+python -m toxicity evaluate       # writes results/results.md and charts
+pytest                            # 19 tests, no network needed
+```
 
-## Data Processing Pipeline
+Channels and collection limits are set in [`config/channels.yaml`](config/channels.yaml).
 
-1. **Text Tokenization**: Breaking down comments into words using `CountVectorizer`.
-2. **Train-Test Split**: Divided data into training and testing sets.
-3. **Feature Engineering**:
-   - Extracted textual features such as frequency counts of tokens.
+## Project layout
 
----
+```
+config/channels.yaml        channels and collection limits
+config/lexicon.csv          word list, with categories and notes on excluded terms
+src/toxicity/collect.py     YouTube API client, pagination, overlap guard
+src/toxicity/text.py        cleaning and normalisation for Hinglish
+src/toxicity/lexicon.py     word-list matching
+src/toxicity/score.py       Detoxify scoring
+src/toxicity/sample.py      stratified, weighted labelling sample
+src/toxicity/evaluate.py    cross-validated metrics, prevalence estimates, intervals
+src/toxicity/report.py      charts and results.md
+notebooks/run_study.ipynb   the whole study in Colab
+docs/labelling-guide.md     labelling rules
+tests/                      pytest suite with a mocked YouTube API
+```
 
-## Machine Learning Model
+## Changes from the 2021 version
 
-### Model Used:
-- Logistic Regression:
-  - Used for binary classification (toxic vs. non-toxic).
-  - Achieved an F1 score of **0.9209**.
+The first version of this project (SRM Institute of Science and Technology) reported a 23% average toxicity rate across five channels. A 2026 review found that result could not stand:
 
-### Evaluation Metrics:
-- **Accuracy**: 97.9% on training data, 89.73% on test data.
-- **Confusion Matrix**: Analyzed predictions to identify false positives and negatives.
+- **The dataset covered one video, not six channels.** All six channel files held the same ~1,500 comments from a single Total Gaming stream, re-fetched at slightly different times and saved under different channel names.
+- **The labels measured sentiment, not toxicity.** Comments were labelled with TextBlob's English sentiment score, which rates almost all Hinglish as neutral, so friendly comments were counted as toxic. The classifier then learned to reproduce TextBlob, which is why its accuracy looked high.
 
----
+Running the new word list over that 2021 stream flags about 0.3% of comments, against the 23% originally reported. The project was rebuilt with fresh collection, human labels, and validated measurement. The original notebook and data remain in the git history.
 
-## Results and Analysis
+## Limitations
 
-1. **Toxicity Distribution**:
-   - Toxic comments accounted for **23.16%** on average across channels.
-   - Highest toxicity rate observed was **27%**.
+- One annotator. A second annotator labelling a subset would allow inter-annotator agreement to be reported.
+- Recent uploads only; a single controversial video or live stream can move a channel's rate.
+- Comments already removed by YouTube or the channel's moderators are invisible to the API, so these figures describe what remains visible.
 
-2. **Visualization**:
-   - Bar charts and graphs illustrating toxicity across channels.
+## Acknowledgements
 
-3. **Selected Channels**:
-   - Data from the top 5 Indian esports YouTube channels based on subscriber count.
-
----
-
-## Future Work
-
-- Expanding the dataset to include more channels and videos.
-- Incorporating advanced NLP models like transformers to improve accuracy.
-- Exploring multilingual datasets to cover non-English comments.
-
----
-
-## Acknowledgments
-
-We extend our gratitude to:
-- **SRM Institute of Science and Technology** for providing the opportunity to work on this project.
-- **Dr. Subalalitha C N** and **Dr. Subalalitha C N** for their guidance and support.
-
----
+Started as a project at SRM Institute of Science and Technology under the guidance of Dr. Subalalitha C N.
 
 ## References
 
-1. Obadimu, Adewale et al., “Identifying Toxicity Within YouTube Video Comments,” 2019.
-2. Joshua Guberman et al., “Quantifying Toxicity on Twitter,” CSCW’16.
-3. Kirk R. Williams and Nancy G. Guerra, “Prevalence and Predictors of Internet Bullying,” 2007.
+1. Obadimu, A., Mead, E., Hussain, M. N., & Agarwal, N. (2019). Identifying toxicity within YouTube video comments. *SBP-BRiMS 2019*.
+2. Guberman, J., Schmitz, C., & Hemphill, L. (2016). Quantifying toxicity and verbal violence on Twitter. *CSCW '16 Companion*.
+3. Hanu, L., & Unitary team (2020). Detoxify. GitHub, https://github.com/unitaryai/detoxify.
+4. Rogan, W. J., & Gladen, B. (1978). Estimating prevalence from the results of a screening test. *American Journal of Epidemiology*, 107(1), 71–76.
+
+## License
+
+MIT © Harsh Raj
