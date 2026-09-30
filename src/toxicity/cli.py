@@ -23,6 +23,15 @@ def main(argv=None):
     e = sub.add_parser("evaluate"); e.add_argument("--labels", default="data/annotation/labels.csv")
     a = p.parse_args(argv)
 
+    from pathlib import Path
+    needs = {"score": ("data/comments.csv", "collect"), "sample": ("data/scored.csv", "score"),
+             "evaluate": ("data/annotation/sample_key.csv", "sample")}
+    if a.step in needs and not Path(needs[a.step][0]).exists():
+        sys.exit(f"{needs[a.step][0]} not found in {Path.cwd()}. Run `{needs[a.step][1]}` first, "
+                 "from the project folder (in Colab: /content/repo).")
+    if a.step == "evaluate" and not Path(a.labels).exists():
+        sys.exit(f"{a.labels} not found. Upload your labelled file first.")
+
     if a.step == "collect":
         key = os.environ.get("YOUTUBE_API_KEY")
         if not key:
@@ -43,7 +52,10 @@ def main(argv=None):
     elif a.step == "evaluate":
         from .evaluate import evaluate
         from .report import report
-        m = evaluate(labels_csv=a.labels)
+        try:
+            m = evaluate(labels_csv=a.labels)
+        except ValueError as err:
+            sys.exit(f"Stopped: {err}")
         report()
         print(f"Best method: {m['best_method']}. See results/results.md")
 
