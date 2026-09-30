@@ -8,7 +8,7 @@ How toxic are the comment sections of India's biggest gaming channels, and how w
 
 10,471 comments from the 10 latest uploads of each channel; 60 hand-labelled, 5 of them toxic. Full tables and charts: [`results/results.md`](results/results.md).
 
-- **Visible toxicity is low.** Correcting the word list for its measured error rates gives 2.1% for Gyan Gaming (95% CI 0.2%–8.2%), 0.6% for Total Gaming (0.0%–2.2%) and 0.0% for Techno Gamerz (0.0%–0.6%). The 2021 figure of 23% was far off (see below).
+- **Visible toxicity is low.** Correcting the word list for its measured error rates gives 2.1% for Gyan Gaming (95% CI 0.2%–8.2%), 0.6% for Total Gaming (0.0%–2.2%) and 0.0% for Techno Gamerz (0.0%–0.6%).
 - **The channels can't be ranked yet.** Gyan Gaming comes out highest, but its intervals overlap the others'. More labels would settle it.
 - **The off-the-shelf model failed on Hinglish.** Detoxify multilingual reached an F1 of 2.4%, with 1.3% precision: almost everything it flagged was harmless. The transparent word list did best (F1 44%, specificity 99.8%), and a small model trained on the labels was the most precise (48.5%) but missed most toxic comments.
 - **What toxicity there is, is mostly mild.** The toxic comments in the sample were insults ("noob" used as an attack, mocking the creator's voice) and casual Hindi abuse; none were threats or hate.
@@ -27,7 +27,7 @@ Most comments are **Hinglish**: Hindi written in Latin script, mixed with Englis
 
 ## Method
 
-1. **Collect** (`toxicity collect`). The YouTube Data API v3 fetches comments and replies from each channel's 10 most recent uploads. Author IDs are hashed, so no usernames are stored. Collection stops if two channels share videos or more than 15% of their comments, which guards against the data mix-up described below.
+1. **Collect** (`toxicity collect`). The YouTube Data API v3 fetches comments and replies from each channel's 10 most recent uploads. Author IDs are hashed, so no usernames are stored. Collection stops if two channels share videos or more than 15% of their comments, so the same comments can't end up filed under two channels.
 2. **Score** (`toxicity score`). Every comment gets two automatic judgements:
    - [Detoxify](https://github.com/unitaryai/detoxify)'s multilingual XLM-RoBERTa model, a toxicity probability from 0 to 1.
    - A transparent Hinglish and English [word list](config/lexicon.csv) with whole-word matching that sees through leetspeak, stretched letters and masked spellings.
@@ -75,15 +75,6 @@ notebooks/run_study.ipynb   the whole study in Colab
 docs/labelling-guide.md     labelling rules
 tests/                      pytest suite with a mocked YouTube API
 ```
-
-## Changes from the 2021 version
-
-The first version of this project (SRM Institute of Science and Technology) reported a 23% average toxicity rate across five channels. A 2026 review found that result could not stand:
-
-- **The dataset covered one video, not six channels.** All six channel files held the same ~1,500 comments from a single Total Gaming stream, re-fetched at slightly different times and saved under different channel names.
-- **The labels measured sentiment, not toxicity.** Comments were labelled with TextBlob's English sentiment score, which rates almost all Hinglish as neutral, so friendly comments were counted as toxic. The classifier then learned to reproduce TextBlob, which is why its accuracy looked high.
-
-Running the new word list over that 2021 stream flags about 0.3% of comments, against the 23% originally reported. The project was rebuilt with fresh collection, human labels, and validated measurement. The original notebook and data remain in the git history.
 
 ## Limitations
 
