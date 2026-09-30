@@ -1,10 +1,25 @@
 # Toxicity in Indian Esports YouTube Comments
 
-How toxic are the comment sections of India's biggest gaming channels, and how well can automatic tools tell? This project collects recent comments from five channels, labels a sample by hand, measures three detection methods against those labels, and estimates the share of toxic comments per channel with confidence intervals.
+How toxic are the comment sections of India's biggest gaming channels, and how well can automatic tools tell? This project collects recent comments from three of the biggest channels (Total Gaming, Techno Gamerz and Gyan Gaming), labels a sample by hand, measures three detection methods against those labels, and estimates the share of toxic comments per channel with confidence intervals.
 
 [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/harsh-github007/Identifying-Toxicity-Within-Esports-YouTube-Channels/blob/main/notebooks/run_study.ipynb)
 
-> **Results:** see [`results/results.md`](results/results.md) once the study has been run. The pipeline and tests are complete; the numbers are produced by running the notebook.
+## Findings (September 2026 run)
+
+10,471 comments from the 10 latest uploads of each channel; 60 hand-labelled, 5 of them toxic. Full tables and charts: [`results/results.md`](results/results.md).
+
+- **Visible toxicity is low.** Correcting the word list for its measured error rates gives 2.1% for Gyan Gaming (95% CI 0.2%–8.2%), 0.6% for Total Gaming (0.0%–2.2%) and 0.0% for Techno Gamerz (0.0%–0.6%). The 2021 figure of 23% was far off (see below).
+- **The channels can't be ranked yet.** Gyan Gaming comes out highest, but its intervals overlap the others'. More labels would settle it.
+- **The off-the-shelf model failed on Hinglish.** Detoxify multilingual reached an F1 of 2.4%, with 1.3% precision: almost everything it flagged was harmless. The transparent word list did best (F1 44%, specificity 99.8%), and a small model trained on the labels was the most precise (48.5%) but missed most toxic comments.
+- **What toxicity there is, is mostly mild.** The toxic comments in the sample were insults ("noob" used as an attack, mocking the creator's voice) and casual Hindi abuse; none were threats or hate.
+
+| Channel | Comments | All-comments estimate (95% CI) |
+| --- | ---: | ---: |
+| Gyan Gaming | 339 | 2.1% (0.2%–8.2%) |
+| Total Gaming | 5,056 | 0.6% (0.0%–2.2%) |
+| Techno Gamerz | 5,076 | 0.0% (0.0%–0.6%) |
+
+![Toxicity by channel](results/figures/prevalence.png)
 
 ## Why it's hard
 
@@ -72,6 +87,8 @@ Running the new word list over that 2021 stream flags about 0.3% of comments, ag
 
 ## Limitations
 
+- Small labelled sample: 60 of the 400 drawn comments, with only 5 toxic, so every interval is wide. Labelling the remaining rows and re-running `evaluate` would tighten them.
+- Two planned channels (A_S Gaming, Desi Gamers) returned no comments through the API and were dropped.
 - One annotator. A second annotator labelling a subset would allow inter-annotator agreement to be reported.
 - Recent uploads only; a single controversial video or live stream can move a channel's rate.
 - Comments already removed by YouTube or the channel's moderators are invisible to the API, so these figures describe what remains visible.

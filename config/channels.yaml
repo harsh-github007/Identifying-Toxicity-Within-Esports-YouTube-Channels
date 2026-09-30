@@ -13,7 +13,8 @@ channels:
     id: UCX8pnu3DYUnx8qy8V_c6oHg
   - name: Gyan Gaming
     id: UChXi_PlJkRMPYFQBOJ3MpxA
-  - name: A_S Gaming
-    handle: "@A_S_Gaming"     # verify on the channel page
-  - name: Desi Gamers
-    handle: "@DesiGamers"     # verify on the channel page
+  # Dropped for the September 2026 run: no comments were returned for these handles.
+  # - name: A_S Gaming
+  #   handle: "@A_S_Gaming"
+  # - name: Desi Gamers
+  #   handle: "@DesiGamers"

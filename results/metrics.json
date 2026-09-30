@@ -1,0 +1,314 @@
+{
+  "labelled": 60,
+  "labelled_toxic": 5,
+  "comments": 10471,
+  "methods": [
+    {
+      "name": "Word list",
+      "threshold": null,
+      "precision": 0.42616033755274263,
+      "recall": 0.4588627812877121,
+      "specificity": 0.9975814568792327,
+      "f1": 0.4419073662621774,
+      "accuracy": 0.9954809753805811,
+      "ci": {
+        "precision": [
+          0.13924050632911392,
+          0.8382745573957738
+        ],
+        "recall": [
+          0.13852813852813853,
+          1.0
+        ],
+        "specificity": [
+          0.9951685135722678,
+          0.9994129599329085
+        ],
+        "f1": [
+          0.15635757912270962,
+          0.7929564411492123
+        ],
+        "accuracy": [
+          0.9912602667245856,
+          0.9987609009973533
+        ]
+      }
+    },
+    {
+      "name": "Detoxify multilingual",
+      "threshold": 0.2,
+      "precision": 0.013015739344096278,
+      "recall": 0.14992546319301484,
+      "specificity": 0.9554989507676543,
+      "f1": 0.023952084795970954,
+      "accuracy": 0.9523579937466324,
+      "ci": {
+        "precision": [
+          0.0,
+          0.264
+        ],
+        "recall": [
+          0.0,
+          0.5
+        ],
+        "specificity": [
+          0.8754674121197978,
+          0.9969488459042504
+        ],
+        "f1": [
+          0.0,
+          0.2797804430192173
+        ],
+        "accuracy": [
+          0.8718839932158237,
+          0.9939772171422456
+        ]
+      }
+    },
+    {
+      "name": "Char n-gram model (trained on your labels)",
+      "threshold": 0.5,
+      "precision": 0.4852941176470588,
+      "recall": 0.14992546319301484,
+      "specificity": 0.9993775808145084,
+      "f1": 0.22907966809479904,
+      "accuracy": 0.9960655395991278,
+      "ci": {
+        "precision": [
+          0.2391304347826087,
+          1.0
+        ],
+        "recall": [
+          0.07404026543446225,
+          0.5
+        ],
+        "specificity": [
+          0.9981328071933082,
+          1.0
+        ],
+        "f1": [
+          0.12904310570699817,
+          0.4927238805970147
+        ],
+        "accuracy": [
+          0.9921091442009453,
+          0.9987963291318105
+        ]
+      }
+    }
+  ],
+  "best_method": "Word list",
+  "prevalence_design": [
+    {
+      "channel": "Gyan Gaming",
+      "estimate": 0.06468776253150378,
+      "low": 0.017371143681755172,
+      "high": 0.21258094469213312,
+      "labelled": 22
+    },
+    {
+      "channel": "Techno Gamerz",
+      "estimate": 0.0011718343980619012,
+      "low": 0.0009140082550615781,
+      "high": 0.18676136235136395,
+      "labelled": 20
+    },
+    {
+      "channel": "Total Gaming",
+      "estimate": 0.0026673875822294316,
+      "low": 0.0019834822429971883,
+      "high": 0.19810211886295825,
+      "labelled": 18
+    }
+  ],
+  "prevalence_classifier": [
+    {
+      "channel": "Gyan Gaming",
+      "observed": 0.011799410029498525,
+      "estimate": 0.02055205460891399,
+      "low": 0.0017816058338941665,
+      "high": 0.08205378826246933,
+      "comments": 339,
+      "videos": 10
+    },
+    {
+      "channel": "Techno Gamerz",
+      "observed": 0.002364066193853428,
+      "estimate": 0.0,
+      "low": 0.0,
+      "high": 0.005522850542860966,
+      "comments": 5076,
+      "videos": 10
+    },
+    {
+      "channel": "Total Gaming",
+      "observed": 0.005340189873417721,
+      "estimate": 0.006400884288481047,
+      "low": 0.0004127529066057243,
+      "high": 0.021516027231366804,
+      "comments": 5056,
+      "videos": 10
+    }
+  ],
+  "reply_vs_top_level": {
+    "top_level": 0.004168282279953471,
+    "replies": 0.0
+  },
+  "median_likes": {
+    "not_flagged": 0.0,
+    "flagged": 0.0
+  },
+  "latin_script_share": 0.8692579505300353,
+  "flagged_by_video": [
+    {
+      "channel": "Gyan Gaming",
+      "video_id": "5aYT7q2trbU",
+      "rate": 0.0
+    },
+    {
+      "channel": "Gyan Gaming",
+      "video_id": "Bw3ImtUF8s0",
+      "rate": 0.038461538461538464
+    },
+    {
+      "channel": "Gyan Gaming",
+      "video_id": "FJ0qD_tc-jU",
+      "rate": 0.012048192771084338
+    },
+    {
+      "channel": "Gyan Gaming",
+      "video_id": "JUl_TS9FWP8",
+      "rate": 0.0
+    },
+    {
+      "channel": "Gyan Gaming",
+      "video_id": "NPnpJMXuX1M",
+      "rate": 0.043478260869565216
+    },
+    {
+      "channel": "Gyan Gaming",
+      "video_id": "Xaatui5Wql0",
+      "rate": 0.0
+    },
+    {
+      "channel": "Gyan Gaming",
+      "video_id": "fXcVVRf_H9A",
+      "rate": 0.0
+    },
+    {
+      "channel": "Gyan Gaming",
+      "video_id": "jIdXyBcfIow",
+      "rate": 0.0
+    },
+    {
+      "channel": "Gyan Gaming",
+      "video_id": "licyy3l43ek",
+      "rate": 0.0
+    },
+    {
+      "channel": "Gyan Gaming",
+      "video_id": "tcG3lCkMnEU",
+      "rate": 0.023809523809523808
+    },
+    {
+      "channel": "Techno Gamerz",
+      "video_id": "6gNYko1PLwM",
+      "rate": 0.00196078431372549
+    },
+    {
+      "channel": "Techno Gamerz",
+      "video_id": "8UE7nLyHooc",
+      "rate": 0.00196078431372549
+    },
+    {
+      "channel": "Techno Gamerz",
+      "video_id": "94aoQQQJ26U",
+      "rate": 0.00597609561752988
+    },
+    {
+      "channel": "Techno Gamerz",
+      "video_id": "BE3I2kmzrwg",
+      "rate": 0.0019801980198019802
+    },
+    {
+      "channel": "Techno Gamerz",
+      "video_id": "EO9G3ggR-UE",
+      "rate": 0.001937984496124031
+    },
+    {
+      "channel": "Techno Gamerz",
+      "video_id": "N3ySdpmqF9Y",
+      "rate": 0.0
+    },
+    {
+      "channel": "Techno Gamerz",
+      "video_id": "RHxyCfnHYPg",
+      "rate": 0.001976284584980237
+    },
+    {
+      "channel": "Techno Gamerz",
+      "video_id": "dn5_p5jaJn0",
+      "rate": 0.0
+    },
+    {
+      "channel": "Techno Gamerz",
+      "video_id": "eFqUJuDmIaA",
+      "rate": 0.003929273084479371
+    },
+    {
+      "channel": "Techno Gamerz",
+      "video_id": "t-wlfZW6mpc",
+      "rate": 0.00398406374501992
+    },
+    {
+      "channel": "Total Gaming",
+      "video_id": "6yVbZuXbaOI",
+      "rate": 0.005952380952380952
+    },
+    {
+      "channel": "Total Gaming",
+      "video_id": "GghK29PZjSw",
+      "rate": 0.0019801980198019802
+    },
+    {
+      "channel": "Total Gaming",
+      "video_id": "JEJo-r1H2qc",
+      "rate": 0.0019455252918287938
+    },
+    {
+      "channel": "Total Gaming",
+      "video_id": "_vQbTC_TO_Q",
+      "rate": 0.001976284584980237
+    },
+    {
+      "channel": "Total Gaming",
+      "video_id": "eJbQ6sRwpRE",
+      "rate": 0.007984031936127744
+    },
+    {
+      "channel": "Total Gaming",
+      "video_id": "gAzDaX2X1XE",
+      "rate": 0.009823182711198428
+    },
+    {
+      "channel": "Total Gaming",
+      "video_id": "mX08W0LDrxY",
+      "rate": 0.0019801980198019802
+    },
+    {
+      "channel": "Total Gaming",
+      "video_id": "mzpTzkcL93E",
+      "rate": 0.009940357852882704
+    },
+    {
+      "channel": "Total Gaming",
+      "video_id": "oOHgZYmqGv0",
+      "rate": 0.005952380952380952
+    },
+    {
+      "channel": "Total Gaming",
+      "video_id": "ycZIhyaE3dU",
+      "rate": 0.005940594059405941
+    }
+  ]
+}
