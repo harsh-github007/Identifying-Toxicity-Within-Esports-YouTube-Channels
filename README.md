@@ -6,9 +6,9 @@ How toxic are the comment sections of India's biggest gaming channels, and how w
 
 ## Interactive research frontend
 
-![Research frontend](assets/screenshot.jpg)
+![Toxicity pilot and annotation coverage](assets/screenshot.jpg)
 
-Explore saved channel estimates with 95% uncertainty intervals, switch between corrected all-comment and human-labelled estimates, compare model metrics, and inspect raw word-list flags by video. The interface reads `results/metrics.json`; it does not collect comments or run inference. Decorative esports artwork depicts a fictional player.
+Explore saved channel estimates with 95% uncertainty intervals, switch between corrected all-comment and human-labelled estimates, compare model metrics, and inspect raw word-list flags by video. The interface reads `results/metrics.json`; it does not collect comments or run inference. The opening panel shows annotation coverage rather than decorative artwork.
 
 ```bash
 python -m http.server 4184
@@ -17,14 +17,14 @@ python -m http.server 4184
 
 No JavaScript dependencies or build step are required. The included Pages workflow publishes static assets and aggregate results after changes to main. Set GitHub Pages source to GitHub Actions before deploying.
 
-## Findings (September 2026 run)
+## Pilot findings (September 2026 run)
 
-10,471 comments from the 10 latest uploads of each channel; 60 hand-labelled, 5 of them toxic. Full tables and charts: [`results/results.md`](results/results.md).
+**This is a pilot, not a validated channel comparison.** It contains 10,471 comments from the 10 latest uploads of each channel; 60 hand-labelled, 5 of them toxic. Of the 400 sampled rows, 340 still need human review. Full tables and charts: [`results/results.md`](results/results.md).
 
-- **Visible toxicity is low.** Correcting the word list for its measured error rates gives 2.1% for Gyan Gaming (95% CI 0.2%–8.2%), 0.6% for Total Gaming (0.0%–2.2%) and 0.0% for Techno Gamerz (0.0%–0.6%).
-- **The channels can't be ranked yet.** Gyan Gaming comes out highest, but its intervals overlap the others'. More labels would settle it.
-- **The off-the-shelf model failed on Hinglish.** Detoxify multilingual reached an F1 of 2.4%, with 1.3% precision: almost everything it flagged was harmless. The transparent word list did best (F1 44%, specificity 99.8%), and a small model trained on the labels was the most precise (48.5%) but missed most toxic comments.
-- **What toxicity there is, is mostly mild.** The toxic comments in the sample were insults ("noob" used as an attack, mocking the creator's voice) and casual Hindi abuse; none were threats or hate.
+- **The corrected pilot estimates are low, but uncertain.** Correcting the word list for its measured error rates gives 2.1% for Gyan Gaming (95% CI 0.2%–8.2%), 0.6% for Total Gaming (0.0%–2.2%) and 0.0% for Techno Gamerz (0.0%–0.6%).
+- **The channels can't be ranked yet.** Gyan Gaming comes out highest, but its intervals overlap the others'. More labels are needed; the current sample cannot resolve a ranking.
+- **Detoxify performed poorly on this small labelled sample.** Detoxify multilingual reached an F1 of 2.4%, with 1.3% precision: almost everything it flagged was harmless. The transparent word list did best (F1 44%, specificity 99.8%), and a small model trained on the labels was the most precise (48.5%) but missed most toxic comments.
+- **The five labelled toxic examples are mostly mild.** The toxic comments in the sample were insults ("noob" used as an attack, mocking the creator's voice) and casual Hindi abuse; none were threats or hate.
 
 | Channel | Comments | All-comments estimate (95% CI) |
 | --- | ---: | ---: |
