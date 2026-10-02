@@ -37,3 +37,11 @@ Fill the optional `category` column with the best fit. If more than one applies,
 
 - Label in two or three sittings rather than all 400 at once; attention drifts.
 - After finishing, re-label 40 random rows without looking at your first answers. The share you agree with yourself (and ideally with a friend who labels the same 40) is worth reporting next to the results.
+
+## Complete the September pilot
+
+The saved sample key has 400 rows. The published label sheet contains 60 completed rows, leaving 340 to review. Keep the original sample IDs, strata and weights; do not redraw an easier sample or label only flagged comments.
+
+Use the original local `to_label.csv` containing comment text. The repository's sample key alone is insufficient for annotation, and does not contain the missing text. Review the remaining rows using the rules above, retain uncertain rows as blank, and save completed labels as `data/annotation/labels.csv`. Have a second reviewer independently label a subset before treating results as validated.
+
+Then rerun `python -m toxicity evaluate` against the original scored comments and sample key. Report the actual completed count, toxic count, uncertainty and reviewer agreement. Model-assisted draft labels must be distinguished from human-reviewed labels; neither missing text nor missing judgement may be filled by assumption.
