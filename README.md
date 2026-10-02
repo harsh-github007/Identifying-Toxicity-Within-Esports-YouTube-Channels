@@ -4,6 +4,19 @@ How toxic are the comment sections of India's biggest gaming channels, and how w
 
 [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/harsh-github007/Identifying-Toxicity-Within-Esports-YouTube-Channels/blob/main/notebooks/run_study.ipynb)
 
+## Interactive research frontend
+
+![Research frontend](assets/screenshot.jpg)
+
+Explore saved channel estimates with 95% uncertainty intervals, switch between corrected all-comment and human-labelled estimates, compare model metrics, and inspect raw word-list flags by video. The interface reads `results/metrics.json`; it does not collect comments or run inference. Decorative esports artwork depicts a fictional player.
+
+```bash
+python -m http.server 4184
+# Open http://localhost:4184
+```
+
+No JavaScript dependencies or build step are required. The included Pages workflow publishes static assets and aggregate results after changes to main. Set GitHub Pages source to GitHub Actions before deploying.
+
 ## Findings (September 2026 run)
 
 10,471 comments from the 10 latest uploads of each channel; 60 hand-labelled, 5 of them toxic. Full tables and charts: [`results/results.md`](results/results.md).
